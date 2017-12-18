@@ -5147,9 +5147,9 @@ react-error-overlay@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-3.0.0.tgz#c2bc8f4d91f1375b3dad6d75265d51cd5eeaf655"
 
-react-grid-layout@^0.16.1:
-  version "0.16.1"
-  resolved "https://registry.yarnpkg.com/react-grid-layout/-/react-grid-layout-0.16.1.tgz#45eb5687da2ae6912b63c1c0b79b7fb6bbd32202"
+react-grid-layout@^0.16.2:
+  version "0.16.2"
+  resolved "https://registry.yarnpkg.com/react-grid-layout/-/react-grid-layout-0.16.2.tgz#ef09b0b6db4a9635799663658277ee2d26fa2994"
   dependencies:
     classnames "2.x"
     lodash.isequal "^4.0.0"

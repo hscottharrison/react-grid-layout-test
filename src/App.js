@@ -46,6 +46,7 @@ class App extends Component {
     }
 
     this.onSizeChange = this.onSizeChange.bind(this);
+    this.makeStatic = this.makeStatic.bind(this);
   }
 
   componentDidMount(){
@@ -55,10 +56,41 @@ class App extends Component {
     this.setState({parentWidth, layout});
   }
 
-  onSizeChange(sizing, item){
+  makeStatic(order){
     let layout = this.state.layout;
-    layout[item].h = 2;
+
+    layout[order].static = !layout[order].static;
+
     this.setState({layout})
+
+  }
+
+  onSizeChange(sizing, order){
+    //checks for sizing coming in from click event and adjusts the state accordingly
+    //layout should force ReactGridLayout in GridContainer to re-render, but it is not for some reason
+    let layout = this.state.layout;
+    switch(sizing){
+      case 2:
+        layout[order].h = 2;
+        layout[order].w = 2;
+        break;
+      case 3:
+        layout[order].h = 2;
+        break;
+      case 4:
+        layout[order].w = 2;
+        break;
+      case 1:
+        layout[order].w = 1;
+        layout[order].h = 1;
+        break;
+      default:
+        layout[order].w = 1;
+        layout[order].h = 1;
+        break;
+    }
+
+    this.setState({layout});
 
   }
 
@@ -69,8 +101,9 @@ class App extends Component {
       <div ref={ref => this.grid = ref}>
         <GridContainer
           data={dataPoints}
+          makeStatic={this.makeStatic}
           onSizeChange={this.onSizeChange}
-          layout={this.state.layout}
+          layout={this.state.layout || []}
           gridItems={this.state.gridItems}
           parentWidth={this.state.parentWidth}/>
       </div>
@@ -82,30 +115,30 @@ function buildLayout(dataPoints){
   let layout = [];
 
 
-  let gridItems = dataPoints.map((point, idx) => {
+  dataPoints.map((point, idx) => {
     //set basic layout -- allows the layout to find the correct div
-    let layoutData = {i: idx.toString(), handle: '.handle', cancel: '.cancel'};
+    let layoutData = {i: idx.toString(), static: false, w: 1, h: 1};
     //set the sizing of each div
-    switch(point.sizing){
-      case 1:
-        layoutData.w = 1;
-        layoutData.h = 1;
-        break;
-      case 2:
-        layoutData.w = 2;
-        layoutData.h = 2;
-        break;
-      case 3:
-        layoutData.w = 1;
-        layoutData.h = 2;
-        break;
-      case 4:
-        layoutData.h = 1;
-        layoutData.w = 2;
-        break;
-      default:
-        break;
-    }
+    // switch(point.sizing){
+    //   case 1:
+    //     layoutData.w = 1;
+    //     layoutData.h = 1;
+    //     break;
+    //   case 2:
+    //     layoutData.w = 2;
+    //     layoutData.h = 2;
+    //     break;
+    //   case 3:
+    //     layoutData.w = 1;
+    //     layoutData.h = 2;
+    //     break;
+    //   case 4:
+    //     layoutData.h = 1;
+    //     layoutData.w = 2;
+    //     break;
+    //   default:
+    //     break;
+    // }
     //construct the layout of the divs in the grid
     let count = 0;
     if(idx === 0){

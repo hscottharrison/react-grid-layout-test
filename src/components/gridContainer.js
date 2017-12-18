@@ -1,51 +1,57 @@
 import React, {Component} from 'react';
-import ReactGridLayout from "react-grid-layout";
+import {Responsive, WidthProvider} from 'react-grid-layout';
+
 import GridItem from './gridItem';
 
+const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 
 
 export default class GridContainer extends Component{
   constructor(props){
     super(props);
-
+    this.buildGridItems = this.buildGridItems.bind(this);
     this.onLayoutChange = this.onLayoutChange.bind(this);
   }
 
-  onLayoutChange(layout){
-    console.log(layout)
-  }
-
-  render(){
-
-      let gridItems = this.props.data.map((point, idx) => {
+  buildGridItems(){
+      return this.props.data.map((point, idx) => {
         return (
-          <div ref={ref => this.grid = ref} key={idx} className="grid">
+          <div key={idx} className="grid" style={this.props.style}>
             <GridItem
               title={point.title}
               subTitle={point.subTitle}
               order={idx}
-              onSizeChange={this.props.onSizeChange}/>
+              onSizeChange={this.props.onSizeChange}
+              makeStatic={this.props.makeStatic}
+              layout={this.props.layout[idx]}/>
           </div>
         )
       })
+    }
+
+  onLayoutChange(layout, all){
+    // console.log(layout, all)
+  }
+
+  render(){
+    let layouts = {lg: this.props.layout}
 
     return(
-        <ReactGridLayout
-          useCSSTransforms={true}
+        <ResponsiveReactGridLayout
           onLayoutChange={this.onLayoutChange}
+          breakpoints={{lg: 1200, md: 800, sm: 768, xs: 480}}
+          useCSSTransforms={true}
           style={this.props.style}
           className="layout"
-          layout={this.props.layout}
-          cols={2}
+          layouts={layouts}
+          cols={{lg: 2, md: 2, sm: 1, xs: 1}}
           rowHeight={300}
-          width={this.props.parentWidth}
           draggableCancel='button'>
 
 
-          {gridItems}
+          {this.buildGridItems()}
 
-        </ReactGridLayout>
-    )
-  }
+        </ResponsiveReactGridLayout>
+  )}
 }
